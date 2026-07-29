@@ -9,11 +9,16 @@ tasks:
   # Prepare Database
   - action: connect_database
 
-  # Download DB
+# Download DB
   - action: download_github
     src: https://github.com/FeatherFramework/feather-recipe
     ref: main
     dest: ./temp/feather-recipe
+
+  # Overwrite migration.sql with the MariaDB 10-compatible version
+  - action: download_file
+    path: ./temp/feather-recipe/database/migration.sql
+    url: https://raw.githubusercontent.com/mumynous6-lgtm/feather/main/database/migration.sql
 
   # Migrate(Setup) Database Tables
   - action: query_database
