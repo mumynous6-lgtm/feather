@@ -1,0 +1,101 @@
+$engine: 3
+$onesync: on
+name: Feather
+description: The official recipe for Feather Framework.
+version: 1.0.0
+author: bcc
+
+tasks:
+  # Prepare Database
+  - action: connect_database
+
+  # Download DB
+  - action: download_github
+    src: https://github.com/FeatherFramework/feather-recipe
+    ref: main
+    dest: ./temp/feather-recipe
+
+  # Migrate(Setup) Database Tables
+  - action: query_database
+    file: ./temp/feather-recipe/database/migration.sql
+
+  # Seed Database
+  - action: query_database
+    file: ./temp/feather-recipe/database/seed.sql
+
+  # Download default CFX resources
+  - action: download_github
+    src: https://github.com/citizenfx/cfx-server-data
+    ref: master
+    subpath: resources
+    dest: ./resources
+
+  # Move the server config over
+  - action: move_path
+    src: ./temp/feather-recipe/server.cfg
+    dest: ./server.cfg
+
+  # Move the server icon over
+  - action: move_path
+    src: ./temp/feather-recipe/servericon.png
+    dest: ./servericon.png
+
+  # Downloading Feather Framework Scripts
+
+  # Core
+  - action: download_file
+    path: ./temp/files/feather-core.zip
+    url: https://github.com/FeatherFramework/feather-core/releases/latest/download/feather-core.zip
+
+  - action: unzip
+    src: ./temp/files/feather-core.zip
+    dest: ./resources/[feather]/feather-core
+
+  # Menu
+  - action: download_file
+    path: ./temp/files/feather-menu.zip
+    url: https://github.com/FeatherFramework/feather-menu/releases/latest/download/feather-menu.zip
+
+  - action: unzip
+    src: ./temp/files/feather-menu.zip
+    dest: ./resources/[feather]/feather-menu
+
+  # Character
+  - action: download_github
+    src: https://github.com/FeatherFramework/feather-character
+    ref: main
+    dest: ./resources/[feather]/feather-character
+
+  # Weapons
+  - action: download_github
+    src: https://github.com/FeatherFramework/feather-weapons
+    ref: main
+    dest: ./resources/[feather]/feather-weapons
+
+  # Inventory
+  - action: download_file
+    path: ./temp/files/feather-inventory.zip
+    url: https://github.com/FeatherFramework/feather-inventory/releases/latest/download/feather-inventory.zip
+
+  - action: unzip
+    src: ./temp/files/feather-inventory.zip
+    dest: ./resources/[feather]/feather-inventory
+
+  # Download OxmySQL dependency
+  - action: download_file
+    path: ./temp/files/oxmysql.zip
+    url: https://github.com/overextended/oxmysql/releases/latest/download/oxmysql.zip
+
+  - action: unzip
+    src: ./temp/files/oxmysql.zip
+    dest: ./resources/[essentials]
+
+  # Download Weathersync dependency
+  - action: download_github
+    src: https://github.com/kibook/weathersync
+    ref: master
+    dest: ./resources/[essentials]/weathersync
+
+  # Clean up db files
+  - action: remove_path
+    path: ./temp
